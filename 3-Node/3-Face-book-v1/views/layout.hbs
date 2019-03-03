@@ -22,6 +22,20 @@
     <li class="nav-item">
       <a class="nav-link" href="/posts">View All</a>
     </li>
+
+    {{#if user}}
+    <li class="nav-item">
+      <a class="nav-link" href="/users/logout">logout</a>
+    </li>
+    {{else}}
+    <li class="nav-item">
+      <a class="nav-link" href="/users/register">Register</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/users/login">Login</a>
+    </li>
+    {{/if}}
+
   </ul>
 
   <hr />
@@ -32,7 +46,6 @@
   {{#if error_msg}}
   <div class="alert alert-danger">{{error_msg}}</div>
   {{/if}}
-  <hr />
 
   {{{body}}}
 

@@ -2,13 +2,17 @@ var express = require('express');
 var router = express.Router();
 
 var Post = require('../model/Post')
+var auth = require('../helpers/auth');
 
 router
-  .get('/new', function (req, res, next) {
+  .get('/new', auth.ensureAuthenticated, function (req, res, next) {
     res.render('post/new-form');
   })
-  .get('/', function (req, res, next) {
-    Post.find({})
+  .get('/', auth.ensureAuthenticated, function (req, res, next) {
+    let user = req.user;
+
+    Post.find({ user: user.userName })
+      .sort({ date: 'desc' })
       .then(posts => {
         res.render('post/view', { posts })
       })
@@ -29,11 +33,8 @@ router
         res.render('post/edit-form', post)
       })
   })
-  .post('/', (req, res, next) => {
-
+  .post('/', auth.ensureAuthenticated, (req, res, next) => {
     let form = req.body;
-    console.log(form);
-
     let errors = [];
     if (form.title === "") {
       errors.push({ message: 'title is required' })
@@ -41,11 +42,14 @@ router
     if (form.body === "") {
       errors.push({ message: 'body is required' })
     }
-
     if (errors.length > 0) {
       res.render('post/new-form', { errors, title: form.title, body: form.body })
     } else {
       let newPost = new Post(form);
+
+      let user = req.user;
+      newPost.user = user.userName;
+
       newPost.save()
         .then(post => {
           req.flash('success_msg', 'New post saved');
