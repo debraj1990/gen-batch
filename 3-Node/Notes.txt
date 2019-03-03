@@ -1,0 +1,12 @@
+
+------------------------------------------
+my-facebook-app
+------------------------------------------
+language      : javascript
+runtime       : Node.js
+framework     : express
+unit-testing  : jest
+databse       : mongodb
+ui template   : handlebars 
+css framework : bootstrap
+------------------------------------------

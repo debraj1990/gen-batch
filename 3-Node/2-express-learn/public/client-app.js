@@ -1,7 +1,7 @@
 
 console.log('-client-app-')
 
-
+ 
 // using DOM API
 let todosBtn = document.querySelector('.btn-dark')
 let todoList = document.getElementById('todo-list');
