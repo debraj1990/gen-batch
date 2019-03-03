@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose')
 
+const flash = require('connect-flash');
+const session = require('express-session');
+
 var methodOverride = require('method-override')
 
 var indexRouter = require('./routes/index');
@@ -19,6 +22,26 @@ var app = express();
 app.use(methodOverride('_method'))
 
 //--------------------------------------------------------------
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.use(flash());
+
+//--------------------------------------------------------------
+
+// Global variables
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
+
+//--------------------------------------------------------------
+
 let url = "mongodb://user1:user123@ds213255.mlab.com:13255/facebook"
 mongoose.connect(url, { useNewUrlParser: true })
   .then(() => {
